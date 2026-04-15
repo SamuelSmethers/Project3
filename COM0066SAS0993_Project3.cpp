@@ -381,6 +381,14 @@ int main()
 	cout<< "ammount: "<< history[0].ammountChanged<< endl;
 	cout<< "memo: "<< history[0].comments << endl;
 
+	history[1].typeOfTrans='W';
+	history[1].ammountChanged=250.00;
+	history[1].comments="Test Transaction #2";
+
+	cout<< "type: "<< history[1].typeOfTrans<< endl;
+	cout<< "ammount: "<< history[1].ammountChanged<< endl;
+	cout<< "memo: "<< history[1].comments << endl;
+
 	printHeader();
 
 	bool exit=false;

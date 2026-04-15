@@ -24,6 +24,12 @@ void printHeader()
     cout<<endl;	
 }
 
+struct Record{
+	char typeOfTrans;
+	double ammountChanged;
+	string comments;
+};
+
 bool isValidName(const string& name)
 {
 	bool valid=false;
@@ -365,6 +371,15 @@ int main()
 	bool pinSet=false;
 	double balance;
 	string name;
+
+	Record history[MAX_TXN];
+	history[0].typeOfTrans='D';
+	history[0].ammountChanged=250.00;
+	history[0].comments="Test Transaction";
+
+	cout<< "type: "<< history[0].typeOfTrans<< endl;
+	cout<< "ammount: "<< history[0].ammountChanged<< endl;
+	cout<< "memo: "<< history[0].comments << endl;
 
 	printHeader();
 

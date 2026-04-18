@@ -5,13 +5,14 @@ using namespace std;
 
 const int MAX_TXN = 100;
 int gTXNCount=0;
-
-char transactionType[MAX_TXN];
-double transactionAmount[MAX_TXN];
-string transactionMemo[MAX_TXN];
 enum AccountType{Checking=1,Savings=2,Student=3};
 
-//test update repo
+struct Record{
+	char typeOfTrans;
+	double ammountChanged;
+	string comments;
+};
+Record history[MAX_TXN];
 
 void printHeader()
 {
@@ -25,12 +26,6 @@ void printHeader()
     cout<<endl;
     cout<<endl;	
 }
-
-struct Record{
-	char typeOfTrans;
-	double ammountChanged;
-	string comments;
-};
 
 bool isValidName(const string& name)
 {
@@ -214,22 +209,22 @@ void recordTransaction(char type,double amount,const string& memo)
 {
 	if(gTXNCount<MAX_TXN)
 	{
-		transactionType[gTXNCount]=type;
-		transactionAmount[gTXNCount]=amount;
-		transactionMemo[gTXNCount]=memo;
+		history[gTXNCount].typeOfTrans=type;
+		history[gTXNCount].ammountChanged=amount;
+		history[gTXNCount].comments=memo;
 		gTXNCount+=1;
 	}
 	else
 	{
 		for(int i = 99;i>0;--i)
 		{
-			transactionType[i-1]=transactionType[i];
-			transactionAmount[i-1]=transactionAmount[i];
-			transactionMemo[i-1]=transactionMemo[i];
+			history[i-1]=history[i];
+			history[i-1]=history[i];
+			history[i-1]=history[i];
 		}
-		transactionType[99]=type;
-		transactionAmount[99]=amount;
-		transactionMemo[99]=memo;
+		history[99].typeOfTrans=type;
+		history[99].ammountChanged=amount;
+		history[99].comments=memo;
 	}
 }
 void printRecentTransaction(int maxToShow)
@@ -246,8 +241,23 @@ void printRecentTransaction(int maxToShow)
 
 	for(int i=1; i<=maxToShow; ++i)
 	{
-		cout<<"["<<transactionType[maxToShow-i]<<"] $"<<transactionAmount[maxToShow-i]<<" | "<< endl;
-		//printf("%s \n", &transactionMemo[maxToShow-i]);
+		if(history[i].typeOfTrans=='D')
+		{
+			cout<<"[Deposit ] ";
+		}
+		else if(history[i].typeOfTrans=='W')
+		{
+			cout<<"[Withdraw] ";
+		}
+		else if(history[i].typeOfTrans=='F')
+		{
+			cout<<"[  Fee   ] ";
+		}
+
+		cout.setf(ios::fixed);
+		cout.setf(ios::showpoint);
+		cout.precision(2);
+		cout<<"$"<<history[i].ammountChanged<<" | "<< history[i].comments <<endl;
 	}
 	cout << "+-----------------------------------------------------+"<< endl;
 }
@@ -281,10 +291,25 @@ void ViewTransactionsByType()
 
 	for(int i=MAX_TXN-1;i>=0;--i)
 	{
-		if(transactionType[i]==selection)
+		if(history[i].typeOfTrans==selection)
 		{
-			cout<<"["<<transactionType[i]<<"] $"<<transactionAmount[i]<<" | "<< endl;
-			//printf("%s \n", &transactionMemo[i]);
+			if(history[i].typeOfTrans=='D')
+		{
+			cout<<"[Deposit ] ";
+		}
+		else if(history[i].typeOfTrans=='W')
+		{
+			cout<<"[Withdraw] ";
+		}
+		else if(history[i].typeOfTrans=='F')
+		{
+			cout<<"[  Fee   ] ";
+		}
+
+		cout.setf(ios::fixed);
+		cout.setf(ios::showpoint);
+		cout.precision(2);
+		cout<<"$"<<history[i].ammountChanged<<" | "<< history[i].comments <<endl;
 		}
 	}
 }
@@ -374,7 +399,7 @@ int main()
 	double balance;
 	string name;
 
-	Record history[MAX_TXN];
+	/*
 	history[0].typeOfTrans='D';
 	history[0].ammountChanged=250.00;
 	history[0].comments="Test Transaction";
@@ -390,6 +415,7 @@ int main()
 	cout<< "type: "<< history[1].typeOfTrans<< endl;
 	cout<< "ammount: "<< history[1].ammountChanged<< endl;
 	cout<< "memo: "<< history[1].comments << endl;
+	*/
 
 	printHeader();
 

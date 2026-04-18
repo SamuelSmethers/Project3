@@ -212,7 +212,7 @@ void recordTransaction(char type,double amount,const string& memo)
 		history[gTXNCount].typeOfTrans=type;
 		history[gTXNCount].ammountChanged=amount;
 		history[gTXNCount].comments=memo;
-		gTXNCount+=1;
+		++gTXNCount;
 	}
 	else
 	{
@@ -239,7 +239,7 @@ void printRecentTransaction(int maxToShow)
 		cout<<"(No transactions yet)"<<endl;
 	}
 
-	for(int i=1; i<=maxToShow; ++i)
+	for(int i=0; i<maxToShow; ++i)
 	{
 		if(history[i].typeOfTrans=='D')
 		{
@@ -345,12 +345,12 @@ void deposit(double& balance, string& pin, bool& pinSet)
 	cout<<"Enter deposit amount: ";
 	cin>>amountToAdd;
 	cout<<"Enter memo: ";
-	cin>>blank;
+	getline(cin,blank);
 	getline(cin,memo);
 	cout<<endl;
 	balance+=amountToAdd;
 	recordTransaction('D',amountToAdd,memo);
-	cout<<"Deposited $"<<amountToAdd<<". New Balance: "<<balance<<endl;
+	cout<<"Deposited $"<<amountToAdd<<". New Balance: $"<<balance<<endl;
 }
 
 void withdraw(double& balance, AccountType type, string& pin, bool& pinSet)
@@ -367,7 +367,7 @@ void withdraw(double& balance, AccountType type, string& pin, bool& pinSet)
 	cout<<"Enter Withdrawal amount: ";
 	cin>>amount;
 	cout<<"Enter memo: ";
-	cin>>blank;
+	getline(cin,blank);
 	getline(cin,memo);
 	cout<<endl;
 	newBal= balance-amount;
@@ -376,14 +376,14 @@ void withdraw(double& balance, AccountType type, string& pin, bool& pinSet)
 	{
 		balance=newBal;
 		recordTransaction('W',amount,memo);
-		cout<<"Withdrew $"<<amount<<". New Balance: "<<balance<<endl;
+		cout<<"Withdrew $"<<amount<<". New Balance: $"<<balance<<endl;
 	}
 	else if((newBal<0) && (type==Checking))
 	{
 		balance=newBal-35.0;
 		recordTransaction('W',amount,memo);
 		recordTransaction('F',35.0,"Overdraft Fee");
-		cout<<"Withdrew $"<<amount<<" and $35.0 for overdraft fee. New Balance: "<<balance<<endl;
+		cout<<"Withdrew $"<<amount<<" and $35.0 for overdraft fee. New Balance: $"<<balance<<endl;
 	}
 	else if((newBal<0) && ((type==Student) || (type==Savings)))
 	{

@@ -394,29 +394,34 @@ void withdraw(double& balance, AccountType type, string& pin, bool& pinSet)
 
 }
 
+void saveToFile()
+{
+
+}
+
+void loadFromFile()
+{
+
+}
+
+string makeFileName(string holder)
+{
+	string fileTitle;
+	fileTitle = holder + ".txt";
+	cout<<fileTitle;
+	return fileTitle;
+}
+
 int main()
 {
 	ifstream i_f;
 	ofstream o_f;
 
-	i_f.open("holder.txt");
-	if(i_f.fail())
-	{
-		cout<<"File open failure"<<endl;
-		exit(EXIT_FAILURE);
-	}
-
-	o_f.open("holder.txt");
-	if(o_f.fail())
-	{
-		cout<<"File open failure"<<endl;
-		exit(EXIT_FAILURE);
-	}
-
 	string pin="empty"; 
 	bool pinSet=false;
 	double balance;
 	string name;
+	string file_name;
 
 	/*
 	history[0].typeOfTrans='D';
@@ -441,6 +446,22 @@ int main()
 	bool exit=false;
 
 	name = readValidName();
+	file_name=makeFileName(name);
+	/*
+	i_f.open(file_name);
+	if(i_f.fail())
+	{
+		cout<<"File open failure"<<endl;
+		exit(EXIT_FAILURE);
+	}
+
+	o_f.open(file_name);
+	if(o_f.fail())
+	{
+		cout<<"File open failure"<<endl;
+		exit(EXIT_FAILURE);
+	}
+	*/
 
 	cout<<"Enter initial balance:";
 	cin>>balance;

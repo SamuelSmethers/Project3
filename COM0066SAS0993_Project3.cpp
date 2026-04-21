@@ -408,7 +408,7 @@ string makeFileName(string holder)
 {
 	string fileTitle;
 	fileTitle = holder + ".txt";
-	cout<<fileTitle;
+	//cout<<fileTitle; //check for correct append
 	return fileTitle;
 }
 

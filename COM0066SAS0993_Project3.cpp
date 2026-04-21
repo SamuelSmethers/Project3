@@ -448,12 +448,11 @@ string makeFileName(string holder)
 
 int main()
 {
-
-	string pin="empty"; 
-	bool pinSet=false;
-	double balance;
-	string name;
-	string file_name;
+	string pin="empty"; //initializing pin to empty //will need to be changed to the user struct
+	bool pinSet=false; //initialize variable for if they have set a pin yet //will need to be changed to the user struct
+	double balance; //variable for initial balance to be entered on program start //will need to be changed to the user struct
+	string name; //inital variable for input of name on program start //will need to be changed to the user struct
+	string file_name; //temp variable to store the file name once its converted
 
 	/*
 	history[0].typeOfTrans='D';
@@ -496,21 +495,22 @@ int main()
 	*/
 
 	cout<<"Enter initial balance:";
-	cin>>balance;
+	cin>>balance; //will need to be changed to the user struct
 	cout<<endl;
 
-	AccountType t;
+	AccountType t; //will need to be changed to the user struct
 	string AccountChosen;
 	t=chooseAccountType();
 	AccountChosen=accountTypeToString(t);
 
+	//initial output of user provided information to start account
 	cout << "+-----------------------------------------------------+"<< endl;
-	cout<< "Account holder: " << name << endl;
-	cout<<"Account Type: " << AccountChosen <<endl;
-	cout<<"Balance: "<<balance<<endl;
+	cout<< "Account holder: " << name << endl; //will need to be changed to the user struct
+	cout<<"Account Type: " << AccountChosen <<endl; //will need to be changed to the user struct
+	cout<<"Balance: "<<balance<<endl; //will need to be changed to the user struct
 	
-	int menuSelection;
-	enum menuOptions{Deposit=1,Withdraw=2,ShowAccount=3,Set_ChangePIN=4, EXIT=5,ViewTransaction=6};
+	int menuSelection; // variable for menu selection input
+	enum menuOptions{Deposit=1,Withdraw=2,ShowAccount=3,Set_ChangePIN=4, EXIT=5,ViewTransaction=6}; //create options for menu
 do{
 	cout << "+-----------------------------------------------------+"<< endl;
 	cout<<"1) Deposit (PIN Required)"<<endl;
@@ -521,13 +521,15 @@ do{
 	cout<<"6) View Transaction by type"<<endl;
 	cout << "+-----------------------------------------------------+"<< endl;
 
+	//loop to check if input is number between 0 and 7
 	do
 	{
 		cout<<"Select an option 1-6:";
 	 	cin>>menuSelection;
 		cout<<endl;
-	} while (!(menuSelection>0) && (menuSelection<6));
+	} while (!(menuSelection>0) && (menuSelection<7));
 
+	// find menu selction and perform action based on selection
 	switch(menuSelection)
 	{
 		case Deposit:
@@ -543,12 +545,12 @@ do{
 			setOrChangePin(pin,pinSet);
 			break;
 		case EXIT:
-			char tempExit;
+			char tempExit; // temp input variable
 			cout<<"Are you sure you want to exit y/n:";
 			cin>>tempExit;
-			if(tempExit=='y' || tempExit=='Y')
+			if(tempExit=='y' || tempExit=='Y') //check temp variable to see if they confirmed they want to exit the program
 			{
-				exit=true;
+				exit=true; //update main loop boolean to stop program
 			}
 			break;
 		case ViewTransaction:
@@ -561,8 +563,8 @@ do{
 
 }while(exit==false);
 
-	i_f.close();
-	o_f.close();
+	i_f.close(); //close file stream
+	o_f.close(); //close file stream
 
 	return 0;
 }

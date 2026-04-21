@@ -396,6 +396,23 @@ void withdraw(double& balance, AccountType type, string& pin, bool& pinSet)
 
 int main()
 {
+	ifstream i_f;
+	ofstream o_f;
+
+	i_f.open("holder.txt");
+	if(i_f.fail())
+	{
+		cout<<"File open failure"<<endl;
+		exit(EXIT_FAILURE);
+	}
+
+	o_f.open("holder.txt");
+	if(o_f.fail())
+	{
+		cout<<"File open failure"<<endl;
+		exit(EXIT_FAILURE);
+	}
+
 	string pin="empty"; 
 	bool pinSet=false;
 	double balance;
@@ -490,6 +507,9 @@ do{
 	}
 
 }while(exit==false);
+
+	i_f.close();
+	o_f.close();
 
 	return 0;
 }

@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstring>
 #include <stdio.h>
+#include <fstream>
+#include <cstdlib>
 using namespace std;
 
 const int MAX_TXN = 100;

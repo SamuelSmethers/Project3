@@ -8,13 +8,26 @@ using namespace std;
 const int MAX_TXN = 100;
 int gTXNCount=0;
 enum AccountType{Checking=1,Savings=2,Student=3};
+ifstream i_f;
+ofstream o_f;
 
 struct Record{
 	char typeOfTrans;
 	double ammountChanged;
 	string comments;
 };
-Record history[MAX_TXN];
+Record history[MAX_TXN]; //create history array
+
+struct UserInfoStorage{ //creates the account parameters to store in
+	string accountHolder;
+	double accountBalance;
+	AccountType typeCheckSaveStud;
+	bool pinStatus;
+	unsigned long hashedPIN;
+	// add transaction history to struct
+};
+
+
 
 void printHeader()
 {
@@ -394,14 +407,26 @@ void withdraw(double& balance, AccountType type, string& pin, bool& pinSet)
 
 }
 
-void saveToFile()
+void saveToFile(string file_name)
 {
-
+	o_f.open(file_name);
+	if(o_f.fail())
+	{
+		cout<<"File open failure"<<endl;
+		exit(EXIT_FAILURE);
+	}
 }
 
-void loadFromFile()
+void loadFromFile(string file_name)
 {
+	i_f.open(file_name);
+	if(i_f.fail())
+	{
+		cout<<"File open failure"<<endl;
+		exit(EXIT_FAILURE);
+	}
 
+	
 }
 
 string makeFileName(string holder)
@@ -414,8 +439,6 @@ string makeFileName(string holder)
 
 int main()
 {
-	ifstream i_f;
-	ofstream o_f;
 
 	string pin="empty"; 
 	bool pinSet=false;

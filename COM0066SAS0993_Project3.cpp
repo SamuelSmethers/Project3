@@ -442,8 +442,8 @@ void loadFromFile(string file_name)
 
 string makeFileName(UserInfoStorage& acc)
 {
-	string fileTitle;
-	fileTitle = acc.accountHolder + ".txt";
+	string fileTitle; //name of file
+	fileTitle = acc.accountHolder + ".txt"; //append .txt to holder name and put into name of file
 	//cout<<fileTitle; //check for correct append
 	return fileTitle;
 }
@@ -451,8 +451,7 @@ string makeFileName(UserInfoStorage& acc)
 int main()
 {
 	UserInfoStorage acc;
-	acc.pinStatus=false; //initialize variable for no pin set yet 
-	acc.accountBalance=0; //variable for initial balance to be entered on program start 
+	acc.pinStatus=false; //initialize variable for no pin set yet  
 	string file_name; //temp variable to store the file name once its converted
 
 	/*

@@ -502,7 +502,6 @@ int main()
 {
 	UserInfoStorage acc;
 	acc.pinStatus=false; //initialize variable for no pin set yet  
-	loadFromFile(acc,history);
 	
 	/*
 	history[0].typeOfTrans='D';
@@ -528,6 +527,7 @@ int main()
 
 	acc.accountHolder = readValidName();
 	acc.fileName=makeFileName(acc);
+	loadFromFile(acc,history);
 
 	cout<<"Enter initial balance:";
 	cin>>acc.accountBalance; 

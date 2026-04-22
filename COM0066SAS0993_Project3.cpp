@@ -424,11 +424,13 @@ void saveToFile(const UserInfoStorage& acc,const Record history[], string file_n
 		exit(EXIT_FAILURE);
 	}
 
-	o_f<<acc.accountBalance;
-	o_f<<acc.accountHolder;
-	o_f<<acc.typeCheckSaveStud;
-	o_f<<acc.hashedPIN;
-	o_f<<acc.pinStatus;
+	o_f<<acc.accountHolder<<","<<acc.accountBalance<<","<<acc.typeCheckSaveStud<<","<<acc.pinStatus<<","<<acc.hashedPIN<<","<<endl;
+	o_f<<gTXNCount<<endl;
+	for(int i=0; i<gTXNCount+1; ++i)
+	{
+		o_f<<history[i].typeOfTrans<<","
+	}
+	
 
 
 	o_f.close(); //close file stream

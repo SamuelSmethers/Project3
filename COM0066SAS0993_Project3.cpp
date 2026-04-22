@@ -199,10 +199,10 @@ AccountType chooseAccountType()
 	return t;
 }
 
-string accountTypeToString(AccountType t)
+string accountTypeToString(UserInfoStorage& acc)
 {
 	string AccountChosen;
-	switch(t)
+	switch(acc.typeCheckSaveStud)
 	{
 		case Checking:
 			AccountChosen = "Checking";
@@ -438,20 +438,19 @@ void loadFromFile(string file_name)
 	
 }
 
-string makeFileName(string holder)
+string makeFileName(UserInfoStorage& acc)
 {
 	string fileTitle;
-	fileTitle = holder + ".txt";
+	fileTitle = acc.accountHolder + ".txt";
 	//cout<<fileTitle; //check for correct append
 	return fileTitle;
 }
 
 int main()
 {
-	string pin="empty"; //initializing pin to empty //will need to be changed to the user struct
-	bool pinSet=false; //initialize variable for if they have set a pin yet //will need to be changed to the user struct
-	double balance; //variable for initial balance to be entered on program start //will need to be changed to the user struct
-	string name; //inital variable for input of name on program start //will need to be changed to the user struct
+	UserInfoStorage acc;
+	acc.pinStatus=false; //initialize variable for no pin set yet 
+	acc.accountBalance=0; //variable for initial balance to be entered on program start 
 	string file_name; //temp variable to store the file name once its converted
 
 	/*
@@ -476,8 +475,8 @@ int main()
 
 	bool exit=false;
 
-	name = readValidName();
-	file_name=makeFileName(name);
+	acc.accountHolder = readValidName();
+	file_name=makeFileName(acc);
 	/*
 	i_f.open(file_name);
 	if(i_f.fail())
@@ -495,19 +494,18 @@ int main()
 	*/
 
 	cout<<"Enter initial balance:";
-	cin>>balance; //will need to be changed to the user struct
+	cin>>acc.accountBalance; 
 	cout<<endl;
 
-	AccountType t; //will need to be changed to the user struct
-	string AccountChosen;
-	t=chooseAccountType();
-	AccountChosen=accountTypeToString(t);
+	string AccountChosen; //string for the eventual display of account type
+	acc.typeCheckSaveStud=chooseAccountType(); //store account type into user storage
+	AccountChosen=accountTypeToString(acc); //convert type to a string
 
 	//initial output of user provided information to start account
 	cout << "+-----------------------------------------------------+"<< endl;
-	cout<< "Account holder: " << name << endl; //will need to be changed to the user struct
+	cout<< "Account holder: " << acc.accountHolder << endl; //will need to be changed to the user struct
 	cout<<"Account Type: " << AccountChosen <<endl; //will need to be changed to the user struct
-	cout<<"Balance: "<<balance<<endl; //will need to be changed to the user struct
+	cout<<"Balance: "<<acc.accountBalance<<endl; //will need to be changed to the user struct
 	
 	int menuSelection; // variable for menu selection input
 	enum menuOptions{Deposit=1,Withdraw=2,ShowAccount=3,Set_ChangePIN=4, EXIT=5,ViewTransaction=6}; //create options for menu

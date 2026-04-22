@@ -22,6 +22,7 @@ struct UserInfoStorage{ //creates the account parameters to store in
 	AccountType typeCheckSaveStud;
 	bool pinStatus;
 	unsigned long hashedPIN;
+	string fileName;
 	// add transaction history to struct
 };
 
@@ -248,6 +249,7 @@ void recordTransaction(UserInfoStorage& acc, char type,double amount,const strin
 		history[99].ammountChanged=amount;
 		history[99].comments=memo;
 	}
+	saveToFile(acc,history);
 }
 void printRecentTransaction(int maxToShow)
 {
@@ -414,10 +416,10 @@ void withdraw(UserInfoStorage& acc)
 
 }
 
-void saveToFile(const UserInfoStorage& acc,const Record history[], string file_name)
+void saveToFile(const UserInfoStorage& acc,const Record history[])
 {
 	ofstream o_f;
-	o_f.open(file_name);
+	o_f.open(acc.fileName);
 	if(o_f.fail())
 	{
 		cout<<"File open failure"<<endl;
@@ -436,10 +438,10 @@ void saveToFile(const UserInfoStorage& acc,const Record history[], string file_n
 	o_f.close(); //close file stream
 }
 
-void loadFromFile(UserInfoStorage& acc, Record history[], string file_name)
+void loadFromFile(UserInfoStorage& acc, Record history[])
 {
 	ifstream i_f;
-	i_f.open(file_name);
+	i_f.open(acc.fileName);
 	if(i_f.fail())
 	{
 		cout<<"File open failure"<<endl;
@@ -462,8 +464,7 @@ int main()
 {
 	UserInfoStorage acc;
 	acc.pinStatus=false; //initialize variable for no pin set yet  
-	string file_name; //temp variable to store the file name once its converted
-
+	
 	/*
 	history[0].typeOfTrans='D';
 	history[0].ammountChanged=250.00;
@@ -487,7 +488,7 @@ int main()
 	bool exit=false;
 
 	acc.accountHolder = readValidName();
-	file_name=makeFileName(acc);
+	acc.fileName=makeFileName(acc);
 
 	cout<<"Enter initial balance:";
 	cin>>acc.accountBalance; 

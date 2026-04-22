@@ -35,6 +35,42 @@ unsigned long hashPin(const string& pin) {
     return h;
 }
 
+void saveToFile(const UserInfoStorage& acc,const Record history[])
+{
+	ofstream o_f;
+	o_f.open(acc.fileName);
+	if(o_f.fail())
+	{
+		cout<<"File open failure"<<endl;
+		exit(EXIT_FAILURE);
+	}
+
+	o_f<<acc.accountHolder<<","<<acc.accountBalance<<","<<acc.typeCheckSaveStud<<","<<acc.pinStatus<<","<<acc.hashedPIN<<","<<endl;
+	o_f<<gTXNCount<<endl;
+	for(int i=0; i<gTXNCount+1; ++i)
+	{
+		o_f<<"{"<<history[i].typeOfTrans<<","<<history[i].ammountChanged<<","<<history[i].comments<<"}";
+	}
+	
+
+
+	o_f.close(); //close file stream
+}
+
+void loadFromFile(UserInfoStorage& acc, Record history[])
+{
+	ifstream i_f;
+	i_f.open(acc.fileName);
+	if(i_f.fail())
+	{
+		cout<<"File open failure"<<endl;
+		exit(EXIT_FAILURE);
+	}
+
+
+	i_f.close(); //close file stream	
+}
+
 void printHeader()
 {
 	cout << "+-----------------------------------------------------+"<< endl;
@@ -415,7 +451,7 @@ void withdraw(UserInfoStorage& acc)
 	}
 
 }
-
+/*
 void saveToFile(const UserInfoStorage& acc,const Record history[])
 {
 	ofstream o_f;
@@ -451,6 +487,7 @@ void loadFromFile(UserInfoStorage& acc, Record history[])
 
 	i_f.close(); //close file stream	
 }
+*/
 
 string makeFileName(UserInfoStorage& acc)
 {

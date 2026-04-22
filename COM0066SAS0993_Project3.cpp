@@ -68,6 +68,7 @@ void loadFromFile(UserInfoStorage& acc, Record history[])
 	}
 
 
+
 	i_f.close(); //close file stream	
 }
 
@@ -501,6 +502,7 @@ int main()
 {
 	UserInfoStorage acc;
 	acc.pinStatus=false; //initialize variable for no pin set yet  
+	loadFromFile(acc,history);
 	
 	/*
 	history[0].typeOfTrans='D';

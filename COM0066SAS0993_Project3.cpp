@@ -78,7 +78,7 @@ string readValidName()
 	return name;
 }
 
-bool isValidPin(const string&  p)
+bool isValidPin(UserInfoStorage& acc, string p)
 {
 	bool validPin;
 	int pinLength = p.length();
@@ -108,60 +108,62 @@ bool isValidPin(const string&  p)
 	return validPin;
 }
 
-bool setOrChangePin(string& pin, bool& pinSet)
+bool setOrChangePin(UserInfoStorage& acc)
 {
 	bool validPIN=false;
 	string tempPIN;
-	string blank;
+	string confirmPIN;
 	bool confirm=false;
 	do
 	{
 		cout << "Set PIN(4-6 digits): " ;
-		cin>>pin;
-	}while(isValidPin(pin)==false);
-	
-	while(confirm==false)
-	{
-		cout<<"Confirm PIN: ";
 		cin>>tempPIN;
-		if(tempPIN==pin)
-		{
-			confirm=true;
-			pinSet=true;
-			cout<<"Pin Set"<<endl;
-		}
-		else
-		{
-			cout<<"Doesn't Match. Try again."<<endl;
-		}
+	}while(isValidPin(acc, tempPIN)==false);
+
+	
+
+	
+	cout<<"Confirm PIN: ";
+	cin>>confirmPIN;
+	if(confirmPIN==tempPIN)
+	{
+		confirm=true;
+		acc.hashedPIN = hashPin(tempPIN);
+		acc.pinStatus=true;
+		cout<<"Pin Set"<<endl;
+	}
+	else
+	{
+		cout<<"Doesn't Match."<<endl;
 	}
 
-	return pinSet;
+
+	return acc.pinStatus;
 }
 
-bool requirePinForAction(string& pin, bool& pinSet)
+bool requirePinForAction(UserInfoStorage& acc)
 {
 	string tempPin;
 	string blank;
 	bool correctEntry;
-	if(pinSet==false)
+	if(acc.pinStatus==false)
 	{
 		cout<<"No PIN set. Set now."<<endl;
-		setOrChangePin(pin, pinSet);
+		setOrChangePin(acc);
 	}
 	
-		cout<< "Enter PIN:";
-		getline(cin,blank);
-		getline(cin,tempPin);
-		if(tempPin!=pin)
-		{
-			cout<<"Incorrect PIN."<<endl;
-			correctEntry= false;
-		}
-		else
-		{
-			correctEntry= true;
-		}
+	cout<< "Enter PIN:";
+	getline(cin,blank);
+	getline(cin,tempPin);
+	if(hashPin(tempPin)!=acc.hashedPIN)
+	{
+		cout<<"Incorrect PIN."<<endl;
+		correctEntry= false;
+	}
+	else
+	{
+		correctEntry= true;
+	}
 
 	return correctEntry;
 }
@@ -329,17 +331,17 @@ void ViewTransactionsByType()
 	}
 }
 
-void showDetails(const string& holder, AccountType type, double balance,bool pinSet)
+void showDetails(UserInfoStorage& acc)
 {
 	cout<<"============== Account Details =============="<<endl;
-	cout<< "Holder: "<< holder<< endl;
-	cout<<"Type: " << accountTypeToString(type)<<endl;
-	cout<< "Balance: "<< balance <<endl;
-	if(pinSet==true)
+	cout<< "Holder: "<< acc.accountHolder<< endl;
+	cout<<"Type: " << accountTypeToString(acc)<<endl;
+	cout<< "Balance: "<< acc.accountBalance <<endl;
+	if(acc.pinStatus==true)
 	{
 		cout<< "PIN: (set) " << endl;	
 	}
-	else if(pinSet==false)
+	else if(acc.pinStatus==false)
 	{
 		cout<< "PIN: (not set) " << endl;
 	}
@@ -347,12 +349,12 @@ void showDetails(const string& holder, AccountType type, double balance,bool pin
 	cout<<"============================================="<<endl;
 }
 
-void deposit(double& balance, string& pin, bool& pinSet)
+void deposit(UserInfoStorage& acc)
 {
 	double amountToAdd=0.00;
 	string memo;
 	string blank;
-	if(requirePinForAction(pin, pinSet)==false)
+	if(requirePinForAction(acc)==false)
 	{
 		cout<<"Deposit canceled."<<endl;
 		return;
@@ -363,18 +365,18 @@ void deposit(double& balance, string& pin, bool& pinSet)
 	getline(cin,blank);
 	getline(cin,memo);
 	cout<<endl;
-	balance+=amountToAdd;
+	acc.accountBalance+=amountToAdd;
 	recordTransaction('D',amountToAdd,memo);
-	cout<<"Deposited $"<<amountToAdd<<". New Balance: $"<<balance<<endl;
+	cout<<"Deposited $"<<amountToAdd<<". New Balance: $"<<acc.accountBalance<<endl;
 }
 
-void withdraw(double& balance, AccountType type, string& pin, bool& pinSet)
+void withdraw(UserInfoStorage& acc)
 {
 	double amount=0.00;
 	string blank;
 	string memo;
 	double newBal;
-	if(requirePinForAction(pin, pinSet)==false)
+	if(requirePinForAction(acc)==false)
 	{
 		cout<<"Withdrawal canceled."<<endl;
 		return;
@@ -385,22 +387,22 @@ void withdraw(double& balance, AccountType type, string& pin, bool& pinSet)
 	getline(cin,blank);
 	getline(cin,memo);
 	cout<<endl;
-	newBal= balance-amount;
+	newBal= acc.accountBalance-amount;
 
 	if(newBal>=0)
 	{
-		balance=newBal;
+		acc.accountBalance=newBal;
 		recordTransaction('W',amount,memo);
-		cout<<"Withdrew $"<<amount<<". New Balance: $"<<balance<<endl;
+		cout<<"Withdrew $"<<amount<<". New Balance: $"<<acc.accountBalance<<endl;
 	}
-	else if((newBal<0) && (type==Checking))
+	else if((newBal<0) && (acc.typeCheckSaveStud==Checking))
 	{
-		balance=newBal-35.0;
+		acc.accountBalance=newBal-35.0;
 		recordTransaction('W',amount,memo);
 		recordTransaction('F',35.0,"Overdraft Fee");
-		cout<<"Withdrew $"<<amount<<" and $35.0 for overdraft fee. New Balance: $"<<balance<<endl;
+		cout<<"Withdrew $"<<amount<<" and $35.0 for overdraft fee. New Balance: $"<<acc.accountBalance<<endl;
 	}
-	else if((newBal<0) && ((type==Student) || (type==Savings)))
+	else if((newBal<0) && ((acc.typeCheckSaveStud==Student) || (acc.typeCheckSaveStud==Savings)))
 	{
 		cout<<"Withdrawal Denied."<<endl;
 	}
@@ -531,16 +533,16 @@ do{
 	switch(menuSelection)
 	{
 		case Deposit:
-			deposit(balance, pin, pinSet);
+			deposit(acc);
 			break;
 		case Withdraw:
-			withdraw(balance, t, pin, pinSet);
+			withdraw(acc);
 			break;
 		case ShowAccount:
-			showDetails(name, t, balance, pinSet);
+			showDetails(acc);
 			break;
 		case Set_ChangePIN:
-			setOrChangePin(pin,pinSet);
+			setOrChangePin(acc);
 			break;
 		case EXIT:
 			char tempExit; // temp input variable

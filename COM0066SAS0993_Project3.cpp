@@ -8,8 +8,6 @@ using namespace std;
 const int MAX_TXN = 100;
 int gTXNCount=0;
 enum AccountType{Checking=1,Savings=2,Student=3};
-ifstream i_f;
-ofstream o_f;
 
 struct Record{
 	char typeOfTrans;
@@ -229,7 +227,7 @@ string accountTypeToString(UserInfoStorage& acc)
 	return AccountChosen;
 }
 
-void recordTransaction(char type,double amount,const string& memo)
+void recordTransaction(UserInfoStorage& acc, char type,double amount,const string& memo)
 {
 	if(gTXNCount<MAX_TXN)
 	{
@@ -373,7 +371,7 @@ void deposit(UserInfoStorage& acc)
 	getline(cin,memo);
 	cout<<endl;
 	acc.accountBalance+=amountToAdd;
-	recordTransaction('D',amountToAdd,memo);
+	recordTransaction(acc,'D',amountToAdd,memo);
 	cout<<"Deposited $"<<amountToAdd<<". New Balance: $"<<acc.accountBalance<<endl;
 }
 
@@ -399,14 +397,14 @@ void withdraw(UserInfoStorage& acc)
 	if(newBal>=0)
 	{
 		acc.accountBalance=newBal;
-		recordTransaction('W',amount,memo);
+		recordTransaction(acc, 'W',amount,memo);
 		cout<<"Withdrew $"<<amount<<". New Balance: $"<<acc.accountBalance<<endl;
 	}
 	else if((newBal<0) && (acc.typeCheckSaveStud==Checking))
 	{
 		acc.accountBalance=newBal-35.0;
-		recordTransaction('W',amount,memo);
-		recordTransaction('F',35.0,"Overdraft Fee");
+		recordTransaction(acc, 'W',amount,memo);
+		recordTransaction(acc, 'F',35.0,"Overdraft Fee");
 		cout<<"Withdrew $"<<amount<<" and $35.0 for overdraft fee. New Balance: $"<<acc.accountBalance<<endl;
 	}
 	else if((newBal<0) && ((acc.typeCheckSaveStud==Student) || (acc.typeCheckSaveStud==Savings)))
@@ -418,16 +416,20 @@ void withdraw(UserInfoStorage& acc)
 
 void saveToFile(string file_name)
 {
+	ofstream o_f;
 	o_f.open(file_name);
 	if(o_f.fail())
 	{
 		cout<<"File open failure"<<endl;
 		exit(EXIT_FAILURE);
 	}
+
+	o_f.close(); //close file stream
 }
 
 void loadFromFile(string file_name)
 {
+	ifstream i_f;
 	i_f.open(file_name);
 	if(i_f.fail())
 	{
@@ -435,7 +437,7 @@ void loadFromFile(string file_name)
 		exit(EXIT_FAILURE);
 	}
 
-	
+	i_f.close(); //close file stream	
 }
 
 string makeFileName(UserInfoStorage& acc)
@@ -476,21 +478,6 @@ int main()
 
 	acc.accountHolder = readValidName();
 	file_name=makeFileName(acc);
-	/*
-	i_f.open(file_name);
-	if(i_f.fail())
-	{
-		cout<<"File open failure"<<endl;
-		exit(EXIT_FAILURE);
-	}
-
-	o_f.open(file_name);
-	if(o_f.fail())
-	{
-		cout<<"File open failure"<<endl;
-		exit(EXIT_FAILURE);
-	}
-	*/
 
 	cout<<"Enter initial balance:";
 	cin>>acc.accountBalance; 
@@ -559,9 +546,6 @@ do{
 	}
 
 }while(exit==false);
-
-	i_f.close(); //close file stream
-	o_f.close(); //close file stream
 
 	return 0;
 }

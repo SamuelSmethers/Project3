@@ -47,7 +47,7 @@ void saveToFile(const UserInfoStorage& acc,const Record history[])
 
 	o_f<<acc.accountHolder<<","<<acc.accountBalance<<","<<acc.typeCheckSaveStud<<","<<acc.pinStatus<<","<<acc.hashedPIN<<","<<endl;
 	o_f<<gTXNCount<<endl;
-	for(int i=0; i<gTXNCount+1; ++i)
+	for(int i=0; i<gTXNCount; ++i)
 	{
 		o_f<<"{"<<history[i].typeOfTrans<<","<<history[i].ammountChanged<<","<<history[i].comments<<"}";
 	}

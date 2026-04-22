@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <cstdlib>
+#include<iomanip>
 using namespace std;
 
 const int MAX_TXN = 100;
@@ -123,7 +124,7 @@ string readValidName()
 
 bool isValidPin(UserInfoStorage& acc, string p)
 {
-	bool validPin;
+	bool validPin=false;
 	int pinLength = p.length();
 
 		if(p.length() > 3 && p.length() < 7)
@@ -298,6 +299,7 @@ void printRecentTransaction(int maxToShow)
 	else if(gTXNCount==0)
 	{
 		cout<<"(No transactions yet)"<<endl;
+		return;
 	}
 
 	for(int i=0; i<maxToShow; ++i)
@@ -411,7 +413,7 @@ void deposit(UserInfoStorage& acc)
 	cout<<endl;
 	acc.accountBalance+=amountToAdd;
 	recordTransaction(acc,'D',amountToAdd,memo);
-	cout<<"Deposited $"<<amountToAdd<<". New Balance: $"<<acc.accountBalance<<endl;
+	cout<<"Deposited $"<<amountToAdd<<". New Balance: $"<<setprecision(2)<<acc.accountBalance<<endl;
 }
 
 void withdraw(UserInfoStorage& acc)
@@ -444,7 +446,7 @@ void withdraw(UserInfoStorage& acc)
 		acc.accountBalance=newBal-35.0;
 		recordTransaction(acc, 'W',amount,memo);
 		recordTransaction(acc, 'F',35.0,"Overdraft Fee");
-		cout<<"Withdrew $"<<amount<<" and $35.0 for overdraft fee. New Balance: $"<<acc.accountBalance<<endl;
+		cout<<"Withdrew $"<<amount<<" and $35.0 for overdraft fee. New Balance: $"<<setprecision(2)<<acc.accountBalance<<endl;
 	}
 	else if((newBal<0) && ((acc.typeCheckSaveStud==Student) || (acc.typeCheckSaveStud==Savings)))
 	{
@@ -527,7 +529,7 @@ int main()
 
 	acc.accountHolder = readValidName();
 	acc.fileName=makeFileName(acc);
-	loadFromFile(acc,history);
+	//loadFromFile(acc,history);
 
 	cout<<"Enter initial balance:";
 	cin>>acc.accountBalance; 

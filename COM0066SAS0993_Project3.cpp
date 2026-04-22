@@ -414,7 +414,7 @@ void withdraw(UserInfoStorage& acc)
 
 }
 
-void saveToFile(string file_name)
+void saveToFile(const UserInfoStorage& acc,const Record history[], string file_name)
 {
 	ofstream o_f;
 	o_f.open(file_name);
@@ -424,10 +424,17 @@ void saveToFile(string file_name)
 		exit(EXIT_FAILURE);
 	}
 
+	o_f<<acc.accountBalance;
+	o_f<<acc.accountHolder;
+	o_f<<acc.typeCheckSaveStud;
+	o_f<<acc.hashedPIN;
+	o_f<<acc.pinStatus;
+
+
 	o_f.close(); //close file stream
 }
 
-void loadFromFile(string file_name)
+void loadFromFile(UserInfoStorage& acc, Record history[], string file_name)
 {
 	ifstream i_f;
 	i_f.open(file_name);
@@ -436,6 +443,7 @@ void loadFromFile(string file_name)
 		cout<<"File open failure"<<endl;
 		exit(EXIT_FAILURE);
 	}
+
 
 	i_f.close(); //close file stream	
 }

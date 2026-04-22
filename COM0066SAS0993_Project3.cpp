@@ -428,7 +428,7 @@ void saveToFile(const UserInfoStorage& acc,const Record history[], string file_n
 	o_f<<gTXNCount<<endl;
 	for(int i=0; i<gTXNCount+1; ++i)
 	{
-		o_f<<history[i].typeOfTrans<<","
+		o_f<<"{"<<history[i].typeOfTrans<<","<<history[i].ammountChanged<<","<<history[i].comments<<"}";
 	}
 	
 

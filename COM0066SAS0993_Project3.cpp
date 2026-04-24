@@ -3,19 +3,20 @@
 #include <stdio.h>
 #include <fstream>
 #include <cstdlib>
-#include<iomanip>
+#include <iomanip>
+#include <cmath>
 using namespace std;
 
-const int MAX_TXN = 100;
 int gTXNCount=0;
 enum AccountType{Checking=1,Savings=2,Student=3};
+
 
 struct Record{
 	char typeOfTrans;
 	double ammountChanged;
 	string comments;
 };
-Record history[MAX_TXN]; //create history array
+Record* history; //create pointer for transaction history
 
 struct UserInfoStorage{ //creates the account parameters to store in
 	string accountHolder;
@@ -24,7 +25,7 @@ struct UserInfoStorage{ //creates the account parameters to store in
 	bool pinStatus;
 	unsigned long hashedPIN;
 	string fileName;
-	// add transaction history to struct
+	
 };
 
 // Hash PIN
@@ -50,7 +51,7 @@ void saveToFile(const UserInfoStorage& acc,const Record history[])
 	o_f<<gTXNCount<<endl;
 	for(int i=0; i<gTXNCount; ++i)
 	{
-		o_f<<"{"<<history[i].typeOfTrans<<","<<history[i].ammountChanged<<","<<history[i].comments<<"}";
+		o_f<<"{"<<(*(history+i)).typeOfTrans<<","<<(*(history+i)).ammountChanged<<","<<(*(history+i)).comments<<"}";
 	}
 	
 
@@ -268,60 +269,63 @@ string accountTypeToString(UserInfoStorage& acc)
 
 void recordTransaction(UserInfoStorage& acc, char type,double amount,const string& memo)
 {
-	if(gTXNCount<MAX_TXN)
+	Record* tempArray;
+	tempArray=new Record[gTXNCount+1];
+	
+	for(int i =0; i<gTXNCount;++i) //add old transactions to new transaction array in same locations
 	{
-		history[gTXNCount].typeOfTrans=type;
-		history[gTXNCount].ammountChanged=amount;
-		history[gTXNCount].comments=memo;
-		++gTXNCount;
+		(*(tempArray+i)).typeOfTrans=(*(history+i)).typeOfTrans;
+		(*(tempArray+i)).ammountChanged=(*(history+i)).ammountChanged;
+		(*(tempArray+i)).comments=(*(history+i)).comments;
+
+	}
+	delete[] history; //delete old array
+
+	//append new transaction to the new place
+	(*(tempArray+(gTXNCount+1))).typeOfTrans=type;
+	(*(tempArray+(gTXNCount+1))).ammountChanged=amount;
+	(*(tempArray+(gTXNCount+1))).comments=memo;
+	
+	
+	history=tempArray;
+	delete[] tempArray;
+	
+	++gTXNCount;
+	saveToFile(acc,history);
+}
+
+void printRecentTransaction(const UserInfoStorage& acc,int maxToShow=10)
+{
+	cout << "+----------------- Recent Transactions ----------------+"<< endl;
+	int lowTXN=min(gTXNCount, maxToShow);
+
+	if(lowTXN==0)
+	{
+		cout<<"(No transactions yet)"<<endl;
 	}
 	else
 	{
-		for(int i = 99;i>0;--i)
+		for(int i=0; i<lowTXN; ++i)
 		{
-			history[i-1]=history[i];
-			history[i-1]=history[i];
-			history[i-1]=history[i];
+			if(history[i].typeOfTrans=='D')
+			{
+				cout<<"[Deposit ] ";
+			}
+			else if(history[i].typeOfTrans=='W')
+			{
+				cout<<"[Withdraw] ";
+			}
+			else if(history[i].typeOfTrans=='F')
+			{
+				cout<<"[  Fee   ] ";
+			}
+
+			
+			cout<<"$"<<history[i].ammountChanged<<" | "<< history[i].comments <<endl;
 		}
-		history[99].typeOfTrans=type;
-		history[99].ammountChanged=amount;
-		history[99].comments=memo;
-	}
-	saveToFile(acc,history);
-}
-void printRecentTransaction(int maxToShow)
-{
-	cout << "+----------------- Recent Transactions ----------------+"<< endl;
-	if(maxToShow<=0)
-	{
-		maxToShow=10;
-	}
-	else if(gTXNCount==0)
-	{
-		cout<<"(No transactions yet)"<<endl;
-		return;
+		
 	}
 
-	for(int i=0; i<maxToShow; ++i)
-	{
-		if(history[i].typeOfTrans=='D')
-		{
-			cout<<"[Deposit ] ";
-		}
-		else if(history[i].typeOfTrans=='W')
-		{
-			cout<<"[Withdraw] ";
-		}
-		else if(history[i].typeOfTrans=='F')
-		{
-			cout<<"[  Fee   ] ";
-		}
-
-		cout.setf(ios::fixed);
-		cout.setf(ios::showpoint);
-		cout.precision(2);
-		cout<<"$"<<history[i].ammountChanged<<" | "<< history[i].comments <<endl;
-	}
 	cout << "+-----------------------------------------------------+"<< endl;
 }
 
@@ -369,9 +373,7 @@ void ViewTransactionsByType()
 			cout<<"[  Fee   ] ";
 		}
 
-		cout.setf(ios::fixed);
-		cout.setf(ios::showpoint);
-		cout.precision(2);
+		
 		cout<<"$"<<history[i].ammountChanged<<" | "<< history[i].comments <<endl;
 		}
 	}
@@ -391,7 +393,7 @@ void showDetails(UserInfoStorage& acc)
 	{
 		cout<< "PIN: (not set) " << endl;
 	}
-	printRecentTransaction(10);
+	printRecentTransaction(acc,10);
 	cout<<"============================================="<<endl;
 }
 
@@ -413,7 +415,7 @@ void deposit(UserInfoStorage& acc)
 	cout<<endl;
 	acc.accountBalance+=amountToAdd;
 	recordTransaction(acc,'D',amountToAdd,memo);
-	cout<<"Deposited $"<<amountToAdd<<". New Balance: $"<<setprecision(2)<<acc.accountBalance<<endl;
+	cout<<"Deposited $"<<amountToAdd<<". New Balance: $"<<acc.accountBalance<<endl;
 }
 
 void withdraw(UserInfoStorage& acc)
@@ -446,7 +448,7 @@ void withdraw(UserInfoStorage& acc)
 		acc.accountBalance=newBal-35.0;
 		recordTransaction(acc, 'W',amount,memo);
 		recordTransaction(acc, 'F',35.0,"Overdraft Fee");
-		cout<<"Withdrew $"<<amount<<" and $35.0 for overdraft fee. New Balance: $"<<setprecision(2)<<acc.accountBalance<<endl;
+		cout<<"Withdrew $"<<amount<<" and $35.0 for overdraft fee. New Balance: $"<<acc.accountBalance<<endl;
 	}
 	else if((newBal<0) && ((acc.typeCheckSaveStud==Student) || (acc.typeCheckSaveStud==Savings)))
 	{
@@ -502,6 +504,13 @@ string makeFileName(UserInfoStorage& acc)
 
 int main()
 {
+	cout.setf(ios::fixed);
+	cout.setf(ios::showpoint);
+	cout.precision(2);
+	
+	history=new Record[gTXNCount];
+	
+
 	UserInfoStorage acc;
 	acc.pinStatus=false; //initialize variable for no pin set yet  
 	
@@ -547,57 +556,58 @@ int main()
 	
 	int menuSelection; // variable for menu selection input
 	enum menuOptions{Deposit=1,Withdraw=2,ShowAccount=3,Set_ChangePIN=4, EXIT=5,ViewTransaction=6}; //create options for menu
-do{
-	cout << "+-----------------------------------------------------+"<< endl;
-	cout<<"1) Deposit (PIN Required)"<<endl;
-	cout<<"2) Withdraw (PIN Required)"<<endl;
-	cout<<"3) Show Account Detials"<<endl;
-	cout<<"4) Set/Change PIN (4-6 Digits)"<<endl;
-	cout<<"5) EXIT"<<endl;
-	cout<<"6) View Transaction by type"<<endl;
-	cout << "+-----------------------------------------------------+"<< endl;
+	do{
+		cout << "+-----------------------------------------------------+"<< endl;
+		cout<<"1) Deposit (PIN Required)"<<endl;
+		cout<<"2) Withdraw (PIN Required)"<<endl;
+		cout<<"3) Show Account Detials"<<endl;
+		cout<<"4) Set/Change PIN (4-6 Digits)"<<endl;
+		cout<<"5) EXIT"<<endl;
+		cout<<"6) View Transaction by type"<<endl;
+		cout << "+-----------------------------------------------------+"<< endl;
 
-	//loop to check if input is number between 0 and 7
-	do
-	{
-		cout<<"Select an option 1-6:";
-	 	cin>>menuSelection;
-		cout<<endl;
-	} while (!(menuSelection>0) && (menuSelection<7));
+		//loop to check if input is number between 0 and 7
+		do
+		{
+			cout<<"Select an option 1-6:";
+			cin>>menuSelection;
+			cout<<endl;
+		} while (!(menuSelection>0) && (menuSelection<7));
 
-	// find menu selction and perform action based on selection
-	switch(menuSelection)
-	{
-		case Deposit:
-			deposit(acc);
-			break;
-		case Withdraw:
-			withdraw(acc);
-			break;
-		case ShowAccount:
-			showDetails(acc);
-			break;
-		case Set_ChangePIN:
-			setOrChangePin(acc);
-			break;
-		case EXIT:
-			char tempExit; // temp input variable
-			cout<<"Are you sure you want to exit y/n:";
-			cin>>tempExit;
-			if(tempExit=='y' || tempExit=='Y') //check temp variable to see if they confirmed they want to exit the program
-			{
-				exit=true; //update main loop boolean to stop program
-			}
-			break;
-		case ViewTransaction:
-			ViewTransactionsByType();
-			break;
-		default:
-		;
+		// find menu selction and perform action based on selection
+		switch(menuSelection)
+		{
+			case Deposit:
+				deposit(acc);
+				break;
+			case Withdraw:
+				withdraw(acc);
+				break;
+			case ShowAccount:
+				showDetails(acc);
+				break;
+			case Set_ChangePIN:
+				setOrChangePin(acc);
+				break;
+			case EXIT:
+				char tempExit; // temp input variable
+				cout<<"Are you sure you want to exit y/n:";
+				cin>>tempExit;
+				if(tempExit=='y' || tempExit=='Y') //check temp variable to see if they confirmed they want to exit the program
+				{
+					exit=true; //update main loop boolean to stop program
+				}
+				break;
+			case ViewTransaction:
+				ViewTransactionsByType();
+				break;
+			default:
+			;
 
-	}
+		}
 
-}while(exit==false);
+	}while(exit==false);
 
+	delete[] history;
 	return 0;
 }

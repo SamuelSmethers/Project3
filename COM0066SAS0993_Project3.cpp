@@ -59,6 +59,7 @@ void saveToFile(const UserInfoStorage& acc,const Record *history)
 		o_f<<gTXNCount<<endl;
 		for(int i=0; i<gTXNCount; ++i)
 		{
+			cout<<"Saving to file history: "<<"{"<<(*(history+i)).typeOfTrans<<","<<(*(history+i)).ammountChanged<<","<<(*(history+i)).comments<<"}"<<endl;
 			o_f<<"{"<<(*(history+i)).typeOfTrans<<","<<(*(history+i)).ammountChanged<<","<<(*(history+i)).comments<<"}"<<endl;
 		}
 	}
@@ -289,19 +290,18 @@ void recordTransaction(UserInfoStorage& acc, char type,double amount,const strin
 
 		}
 	}
-	delete[] history; //delete old array
+	delete [] history; //delete old array
 
 	//append new transaction to the new place
-	(*(tempArray+(gTXNCount))).typeOfTrans=type;
-	(*(tempArray+(gTXNCount))).ammountChanged=amount;
-	(*(tempArray+(gTXNCount))).comments=memo;
+	(*(tempArray+gTXNCount)).typeOfTrans=type;
+	(*(tempArray+gTXNCount)).ammountChanged=amount;
+	(*(tempArray+gTXNCount)).comments=memo;
 	
 	
-	history=tempArray;
-	delete[] tempArray;
-	
+	*history=*tempArray; //assigns history with the same values as tempArray
 	++gTXNCount;
 	saveToFile(acc,history);
+	delete [] tempArray; //delete temp to resize next time
 }
 
 void printRecentTransaction(const UserInfoStorage& acc,int maxToShow=10)

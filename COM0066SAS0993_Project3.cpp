@@ -532,7 +532,7 @@ int main()
 	cout.setf(ios::showpoint);
 	cout.precision(2);
 	
-	history=nullptr; //initialize to null to be checked but will be updated if trasanction occurs
+	history=new Record[gTXNCount]; //initialize to to be checked but will be updated if trasanction occurs
 
 	UserInfoStorage acc;
 	acc.pinStatus=false; //initialize variable for no pin set yet  

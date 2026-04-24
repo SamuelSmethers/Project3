@@ -313,18 +313,19 @@ void printRecentTransaction(const UserInfoStorage& acc,int maxToShow=10)
 			if(history[i].typeOfTrans=='D')
 			{
 				cout<<"[Deposit ] ";
+				cout<<"$"<<history[i].ammountChanged<<" | "<< history[i].comments <<endl;
 			}
 			else if(history[i].typeOfTrans=='W')
 			{
 				cout<<"[Withdraw] ";
+				cout<<"$"<<history[i].ammountChanged<<" | "<< history[i].comments <<endl;
 			}
 			else if(history[i].typeOfTrans=='F')
 			{
 				cout<<"[  Fee   ] ";
+				cout<<"$"<<history[i].ammountChanged<<" | "<< history[i].comments <<endl;
 			}
-
 			
-			cout<<"$"<<history[i].ammountChanged<<" | "<< history[i].comments <<endl;
 		}
 		
 	}

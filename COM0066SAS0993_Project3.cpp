@@ -284,24 +284,32 @@ void recordTransaction(UserInfoStorage& acc, char type,double amount,const strin
 	{
 		for(int i =0; i<gTXNCount;++i) //add old transactions to new transaction array in same locations
 		{
-			(*(tempArray+i)).typeOfTrans=(*(history+i)).typeOfTrans;
-			(*(tempArray+i)).ammountChanged=(*(history+i)).ammountChanged;
-			(*(tempArray+i)).comments=(*(history+i)).comments;
+			tempArray[i].typeOfTrans=history[i].typeOfTrans;
+			tempArray[i].ammountChanged=history[i].ammountChanged;
+			tempArray[i].comments=history[i].comments;
 
 		}
 	}
 	delete [] history; //delete old array
 
 	//append new transaction to the new place
-	(*(tempArray+gTXNCount)).typeOfTrans=type;
-	(*(tempArray+gTXNCount)).ammountChanged=amount;
-	(*(tempArray+gTXNCount)).comments=memo;
+	tempArray[gTXNCount].typeOfTrans=type;
+	tempArray[gTXNCount].ammountChanged=amount;
+	tempArray[gTXNCount].comments=memo;
+
 	
-	
-	*history=*tempArray; //assigns history with the same values as tempArray
+	for(int i =0; i<gTXNCount+1;++i) //add new transactions to new array in same locations
+	{
+		history[i].typeOfTrans=tempArray[i].typeOfTrans;
+		history[i].ammountChanged=tempArray[i].ammountChanged;
+		history[i].comments=tempArray[i].comments;
+
+	}
+
 	++gTXNCount;
 	saveToFile(acc,history);
 	delete [] tempArray; //delete temp to resize next time
+
 }
 
 void printRecentTransaction(const UserInfoStorage& acc,int maxToShow=10)

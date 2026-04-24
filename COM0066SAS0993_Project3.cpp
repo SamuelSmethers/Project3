@@ -49,7 +49,7 @@ void saveToFile(const UserInfoStorage& acc,const Record history[])
 
 	o_f<<acc.accountHolder<<","<<acc.accountBalance<<","<<acc.typeCheckSaveStud<<","<<acc.pinStatus<<","<<acc.hashedPIN<<","<<endl;
 	o_f<<gTXNCount<<endl;
-	for(int i=0; i<gTXNCount; ++i)
+	for(int i=0; i<gTXNCount+1; ++i)
 	{
 		o_f<<"{"<<(*(history+i)).typeOfTrans<<","<<(*(history+i)).ammountChanged<<","<<(*(history+i)).comments<<"}";
 	}
@@ -356,26 +356,31 @@ void ViewTransactionsByType()
 		}
 	}while(again==true);
 
-	for(int i=MAX_TXN-1;i>=0;--i)
+	int printCounter=0; //track how many were output
+	for(int i=gTXNCount-1;i>=0;--i)
 	{
 		if(history[i].typeOfTrans==selection)
 		{
 			if(history[i].typeOfTrans=='D')
-		{
-			cout<<"[Deposit ] ";
-		}
-		else if(history[i].typeOfTrans=='W')
-		{
-			cout<<"[Withdraw] ";
-		}
-		else if(history[i].typeOfTrans=='F')
-		{
-			cout<<"[  Fee   ] ";
-		}
+			{
+				cout<<"[Deposit ] ";
+			}
+			else if(history[i].typeOfTrans=='W')
+			{
+				cout<<"[Withdraw] ";
+			}
+			else if(history[i].typeOfTrans=='F')
+			{
+				cout<<"[  Fee   ] ";
+			}
 
-		
-		cout<<"$"<<history[i].ammountChanged<<" | "<< history[i].comments <<endl;
+			cout<<"$"<<history[i].ammountChanged<<" | "<< history[i].comments <<endl;
+			++printCounter;
 		}
+	}
+	if(printCounter==0)
+	{
+		cout<<"No matching transaction type"<<endl;
 	}
 }
 

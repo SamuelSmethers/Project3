@@ -1,0 +1,6 @@
+Sam,-35.44,1,1,1509442,
+4
+{D,3.67,Egg}
+{D,45.89,More Egg}
+{W,60,Bill}
+{F,35,Overdraft Fee}

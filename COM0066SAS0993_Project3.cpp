@@ -83,6 +83,7 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 
 
 	i_f.close(); //close file stream	
+	return histroyLoaded;
 }
 
 void printHeader()
@@ -570,9 +571,10 @@ int main()
 	cout<<"Enter initial balance:";
 	cin>>acc.accountBalance; 
 	cout<<endl;
-	}
-	string AccountChosen; //string for the eventual display of account type
 	acc.typeCheckSaveStud=chooseAccountType(); //store account type into user storage
+	}
+
+	string AccountChosen; //string for the eventual display of account type
 	AccountChosen=accountTypeToString(acc); //convert type to a string
 
 	//initial output of user provided information to start account

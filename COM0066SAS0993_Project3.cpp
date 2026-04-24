@@ -49,12 +49,19 @@ void saveToFile(const UserInfoStorage& acc,const Record *history)
 	}
 
 	o_f<<acc.accountHolder<<","<<acc.accountBalance<<","<<acc.typeCheckSaveStud<<","<<acc.pinStatus<<","<<acc.hashedPIN<<","<<endl;
-	o_f<<gTXNCount<<endl;
-	for(int i=0; i<gTXNCount+1; ++i)
+	if(gTXNCount==0)
 	{
-		o_f<<"{"<<(*(history+i)).typeOfTrans<<","<<(*(history+i)).ammountChanged<<","<<(*(history+i)).comments<<"}";
+		o_f<<gTXNCount<<endl;
+		o_f<<"No transactions"<<endl;
 	}
-	
+	else
+	{
+		o_f<<gTXNCount<<endl;
+		for(int i=0; i<gTXNCount; ++i)
+		{
+			o_f<<"{"<<(*(history+i)).typeOfTrans<<","<<(*(history+i)).ammountChanged<<","<<(*(history+i)).comments<<"}"<<endl;
+		}
+	}
 
 
 	o_f.close(); //close file stream
@@ -558,9 +565,9 @@ int main()
 
 	//initial output of user provided information to start account
 	cout << "+-----------------------------------------------------+"<< endl;
-	cout<< "Account holder: " << acc.accountHolder << endl; //will need to be changed to the user struct
-	cout<<"Account Type: " << AccountChosen <<endl; //will need to be changed to the user struct
-	cout<<"Balance: "<<acc.accountBalance<<endl; //will need to be changed to the user struct
+	cout<< "Account holder: " << acc.accountHolder << endl; 
+	cout<<"Account Type: " << AccountChosen <<endl; 
+	cout<<"Balance: "<<acc.accountBalance<<endl; 
 	
 	int menuSelection; // variable for menu selection input
 	enum menuOptions{Deposit=1,Withdraw=2,ShowAccount=3,Set_ChangePIN=4, EXIT=5,ViewTransaction=6}; //create options for menu

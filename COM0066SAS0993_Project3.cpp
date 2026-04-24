@@ -18,6 +18,7 @@ struct Record{
 };
 Record* history; //create pointer for transaction history
 
+
 struct UserInfoStorage{ //creates the account parameters to store in
 	string accountHolder;
 	double accountBalance;
@@ -37,7 +38,7 @@ unsigned long hashPin(const string& pin) {
     return h;
 }
 
-void saveToFile(const UserInfoStorage& acc,const Record history[])
+void saveToFile(const UserInfoStorage& acc,const Record *history)
 {
 	ofstream o_f;
 	o_f.open(acc.fileName);
@@ -271,20 +272,22 @@ void recordTransaction(UserInfoStorage& acc, char type,double amount,const strin
 {
 	Record* tempArray;
 	tempArray=new Record[gTXNCount+1];
-	
-	for(int i =0; i<gTXNCount;++i) //add old transactions to new transaction array in same locations
+	if(history!=nullptr)
 	{
-		(*(tempArray+i)).typeOfTrans=(*(history+i)).typeOfTrans;
-		(*(tempArray+i)).ammountChanged=(*(history+i)).ammountChanged;
-		(*(tempArray+i)).comments=(*(history+i)).comments;
+		for(int i =0; i<gTXNCount;++i) //add old transactions to new transaction array in same locations
+		{
+			(*(tempArray+i)).typeOfTrans=(*(history+i)).typeOfTrans;
+			(*(tempArray+i)).ammountChanged=(*(history+i)).ammountChanged;
+			(*(tempArray+i)).comments=(*(history+i)).comments;
 
+		}
 	}
 	delete[] history; //delete old array
 
 	//append new transaction to the new place
-	(*(tempArray+(gTXNCount+1))).typeOfTrans=type;
-	(*(tempArray+(gTXNCount+1))).ammountChanged=amount;
-	(*(tempArray+(gTXNCount+1))).comments=memo;
+	(*(tempArray+(gTXNCount))).typeOfTrans=type;
+	(*(tempArray+(gTXNCount))).ammountChanged=amount;
+	(*(tempArray+(gTXNCount))).comments=memo;
 	
 	
 	history=tempArray;
@@ -513,8 +516,7 @@ int main()
 	cout.setf(ios::showpoint);
 	cout.precision(2);
 	
-	history=new Record[gTXNCount];
-	
+	history=nullptr; //initialize to null to be checked but will be updated if trasanction occurs
 
 	UserInfoStorage acc;
 	acc.pinStatus=false; //initialize variable for no pin set yet  

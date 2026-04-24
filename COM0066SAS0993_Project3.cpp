@@ -68,14 +68,16 @@ void saveToFile(const UserInfoStorage& acc,const Record *history)
 	o_f.close(); //close file stream
 }
 
-void loadFromFile(UserInfoStorage& acc, Record history[])
+bool loadFromFile(UserInfoStorage& acc, Record history[])
 {
+	bool histroyLoaded=false;
 	ifstream i_f;
 	i_f.open(acc.fileName);
 	if(i_f.fail())
 	{
-		cout<<"File open failure"<<endl;
-		exit(EXIT_FAILURE);
+		cout<<"File open failure or no account found."<<endl;
+		i_f.close(); //close file stream
+		return histroyLoaded;
 	}
 
 
@@ -563,12 +565,12 @@ int main()
 
 	acc.accountHolder = readValidName();
 	acc.fileName=makeFileName(acc);
-	//loadFromFile(acc,history);
-
+	if(loadFromFile(acc,history)==false)
+	{
 	cout<<"Enter initial balance:";
 	cin>>acc.accountBalance; 
 	cout<<endl;
-
+	}
 	string AccountChosen; //string for the eventual display of account type
 	acc.typeCheckSaveStud=chooseAccountType(); //store account type into user storage
 	AccountChosen=accountTypeToString(acc); //convert type to a string

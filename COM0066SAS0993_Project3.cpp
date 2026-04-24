@@ -48,7 +48,7 @@ void saveToFile(const UserInfoStorage& acc,const Record *history)
 		exit(EXIT_FAILURE);
 	}
 
-	o_f<<acc.accountHolder<<","<<acc.accountBalance<<","<<acc.typeCheckSaveStud<<","<<acc.pinStatus<<","<<acc.hashedPIN<<","<<endl;
+	o_f<<acc.accountHolder<<","<<acc.accountBalance<<","<<acc.typeCheckSaveStud<<","<<acc.pinStatus<<","<<acc.hashedPIN<<endl;
 	if(gTXNCount==0)
 	{
 		o_f<<gTXNCount<<endl;
@@ -59,7 +59,7 @@ void saveToFile(const UserInfoStorage& acc,const Record *history)
 		o_f<<gTXNCount<<endl;
 		for(int i=0; i<gTXNCount; ++i)
 		{
-			cout<<"Saving to file history: "<<"{"<<(*(history+i)).typeOfTrans<<","<<(*(history+i)).ammountChanged<<","<<(*(history+i)).comments<<"}"<<endl;
+			//cout<<"Saving to file history: "<<"{"<<(*(history+i)).typeOfTrans<<","<<(*(history+i)).ammountChanged<<","<<(*(history+i)).comments<<"}"<<endl;
 			o_f<<"{"<<(*(history+i)).typeOfTrans<<","<<(*(history+i)).ammountChanged<<","<<(*(history+i)).comments<<"}"<<endl;
 		}
 	}
@@ -78,6 +78,17 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 		cout<<"File open failure or no account found."<<endl;
 		i_f.close(); //close file stream
 		return histroyLoaded;
+	}
+	else
+	{
+		getline(i_f,acc.accountHolder, ',');
+		cout<<"Read: "<<acc.accountHolder<<endl;
+		/*
+		getline(i_f,acc.accountBalance, ',');
+		getline(i_f,acc.typeCheckSaveStud, ',');
+		getline(i_f,acc.pinStatus, ',');
+		getline(i_f,acc.hashedPIN);
+		*/
 	}
 
 
@@ -537,7 +548,7 @@ int main()
 	cout.setf(ios::showpoint);
 	cout.precision(2);
 	
-	history=new Record[gTXNCount]; //initialize to to be checked but will be updated if trasanction occurs
+	history=new Record[gTXNCount]; //initialize
 
 	UserInfoStorage acc;
 	acc.pinStatus=false; //initialize variable for no pin set yet  

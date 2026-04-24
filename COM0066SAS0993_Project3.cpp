@@ -70,14 +70,14 @@ void saveToFile(const UserInfoStorage& acc,const Record *history)
 
 bool loadFromFile(UserInfoStorage& acc, Record history[])
 {
-	bool histroyLoaded=false;
+	bool historyLoaded=false;
 	ifstream i_f;
 	i_f.open(acc.fileName);
 	if(i_f.fail())
 	{
 		cout<<"File open failure or no account found."<<endl;
 		i_f.close(); //close file stream
-		return histroyLoaded;
+		return historyLoaded;
 	}
 	else
 	{
@@ -89,12 +89,13 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 		getline(i_f,acc.pinStatus, ',');
 		getline(i_f,acc.hashedPIN);
 		*/
+		historyLoaded=true;
 	}
 
 
 
 	i_f.close(); //close file stream	
-	return histroyLoaded;
+	return historyLoaded;
 }
 
 void printHeader()

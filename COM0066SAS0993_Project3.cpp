@@ -297,8 +297,10 @@ void recordTransaction(UserInfoStorage& acc, char type,double amount,const strin
 	tempArray[gTXNCount].ammountChanged=amount;
 	tempArray[gTXNCount].comments=memo;
 
-	
-	for(int i =0; i<gTXNCount+1;++i) //add new transactions to new array in same locations
+	++gTXNCount;
+
+	history=new Record[gTXNCount];
+	for(int i =0; i<gTXNCount;++i) //add new transactions to new array in same locations
 	{
 		history[i].typeOfTrans=tempArray[i].typeOfTrans;
 		history[i].ammountChanged=tempArray[i].ammountChanged;
@@ -306,7 +308,7 @@ void recordTransaction(UserInfoStorage& acc, char type,double amount,const strin
 
 	}
 
-	++gTXNCount;
+	
 	saveToFile(acc,history);
 	delete [] tempArray; //delete temp to resize next time
 

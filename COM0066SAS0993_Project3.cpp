@@ -70,7 +70,7 @@ void saveToFile(const UserInfoStorage& acc,const Record *history)
 
 bool loadFromFile(UserInfoStorage& acc, Record history[])
 {
-	//Record* inArray;
+	Record* inArray;
 
 	bool historyLoaded=false;
 	ifstream i_f;
@@ -117,9 +117,9 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 
 		getline(i_f, inputToBeConverted );
 		acc.hashedPIN = std::stoul(inputToBeConverted);
-		cout<<"Read: "<<acc.hashedPIN<<endl;
+		//cout<<"Read: "<<acc.hashedPIN<<endl;
 
-		/*
+		
 		i_f>>gTXNCount;
 		inArray=new Record[gTXNCount];
 		char inputChar;
@@ -140,7 +140,7 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 			inArray[i].comments=inputToBeConverted;
 			cout<<inArray[i].comments<<endl;
 		}
-		
+		/*
 		history=new Record[gTXNCount];
 		for(int i =0; i<gTXNCount;++i) //add new transactions to new array in same locations
 		{

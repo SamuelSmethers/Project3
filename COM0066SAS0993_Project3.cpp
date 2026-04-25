@@ -70,6 +70,8 @@ void saveToFile(const UserInfoStorage& acc,const Record *history)
 
 bool loadFromFile(UserInfoStorage& acc, Record history[])
 {
+	Record* inArray;
+
 	bool historyLoaded=false;
 	ifstream i_f;
 	string inputToBeConverted;
@@ -117,29 +119,38 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 		acc.hashedPIN = std::stoul(inputToBeConverted);
 		//cout<<"Read: "<<acc.hashedPIN<<endl;
 
-		/*
+		
 		i_f>>gTXNCount;
-		history=new Record[gTXNCount];
+		inArray=new Record[gTXNCount];
 		char inputChar;
 		for(int i=0;i<gTXNCount;++i)
 		{
 			i_f>>inputChar;
-			history[i].typeOfTrans=inputChar;
+			inArray[i].typeOfTrans=inputChar;
 			cout<<inputChar<<endl;
 			
 			getline(i_f,inputToBeConverted,',');
 
 			getline(i_f, inputToBeConverted , ',');
-			history[i].ammountChanged=std::stod(inputToBeConverted);
-			cout<<history[i].ammountChanged<<endl;
+			inArray[i].ammountChanged=std::stod(inputToBeConverted);
+			cout<<inArray[i].ammountChanged<<endl;
 
 
 			getline(i_f, inputToBeConverted);
-			history[i].comments=inputToBeConverted;
-			cout<<history[i].comments<<endl;
+			inArray[i].comments=inputToBeConverted;
+			cout<<inArray[i].comments<<endl;
 		}
-		*/
+		
+		history=new Record[gTXNCount];
+		for(int i =0; i<gTXNCount;++i) //add new transactions to new array in same locations
+		{
+			history[i].typeOfTrans=inArray[i].typeOfTrans;
+			history[i].ammountChanged=inArray[i].ammountChanged;
+			history[i].comments=inArray[i].comments;
 
+		}
+		
+		delete [] inArray;
 		
 		historyLoaded=true;
 		cout<<"Found and loaded account."<<endl;

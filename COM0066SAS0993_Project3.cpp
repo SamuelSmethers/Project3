@@ -48,7 +48,7 @@ void saveToFile(const UserInfoStorage& acc,const Record *history)
 		exit(EXIT_FAILURE);
 	}
 
-	o_f<<acc.accountHolder<<","<<acc.accountBalance<<","<<acc.typeCheckSaveStud<<","<<acc.pinStatus<<","<<acc.hashedPIN<<","<<endl;
+	o_f<<acc.accountHolder<<","<<acc.accountBalance<<","<<acc.typeCheckSaveStud<<","<<acc.pinStatus<<","<<acc.hashedPIN<<endl;
 	if(gTXNCount==0)
 	{
 		o_f<<gTXNCount<<endl;
@@ -115,9 +115,9 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 		acc.pinStatus =std::stoi(inputToBeConverted);
 		//cout<<"Read: "<<acc.pinStatus<<endl;
 
-		getline(i_f, inputToBeConverted , ',');
+		getline(i_f, inputToBeConverted );
 		acc.hashedPIN = std::stoul(inputToBeConverted);
-		//cout<<"Read: "<<acc.hashedPIN<<endl;
+		cout<<"Read: "<<acc.hashedPIN<<endl;
 
 		/*
 		i_f>>gTXNCount;

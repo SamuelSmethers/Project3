@@ -72,6 +72,7 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 {
 	bool historyLoaded=false;
 	ifstream i_f;
+	string inputToBeConverted;
 	i_f.open(acc.fileName);
 	if(i_f.fail())
 	{
@@ -83,6 +84,11 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 	{
 		getline(i_f,acc.accountHolder, ',');
 		cout<<"Read: "<<acc.accountHolder<<endl;
+
+		getline(i_f, inputToBeConverted , ',');
+		acc.accountBalance = std::stod(inputToBeConverted);
+		cout<<"Read: "<<acc.accountBalance<<endl;
+
 		/*
 		getline(i_f,acc.accountBalance, ',');
 		getline(i_f,acc.typeCheckSaveStud, ',');

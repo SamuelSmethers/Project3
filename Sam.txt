@@ -1,0 +1,6 @@
+Sam,-36.46,1,1,1509442,
+4
+D,3.67,Egg
+D,6.87,EGG
+W,22.5,mcdonalds
+F,35,Overdraft Fee

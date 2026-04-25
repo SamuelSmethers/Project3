@@ -117,6 +117,7 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 		acc.hashedPIN = std::stoul(inputToBeConverted);
 		//cout<<"Read: "<<acc.hashedPIN<<endl;
 
+		/*
 		i_f>>gTXNCount;
 		history=new Record[gTXNCount];
 		char inputChar;
@@ -137,7 +138,7 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 			history[i].comments=inputToBeConverted;
 			cout<<history[i].comments<<endl;
 		}
-		
+		*/
 
 		
 		historyLoaded=true;

@@ -140,6 +140,7 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 			inArray[i].comments=inputToBeConverted;
 			cout<<inArray[i].comments<<endl;
 		}
+		
 		/*
 		history=new Record[gTXNCount];
 		for(int i =0; i<gTXNCount;++i) //add new transactions to new array in same locations

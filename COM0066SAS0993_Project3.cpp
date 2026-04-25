@@ -82,7 +82,7 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 	}
 	else
 	{
-		//delete [] history;
+		delete [] history;
 		getline(i_f,acc.accountHolder, ',');
 		//cout<<"Read: "<<acc.accountHolder<<endl;
 
@@ -119,14 +119,22 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 		//cout<<"Read: "<<acc.hashedPIN<<endl;
 
 		i_f>>gTXNCount;
-		cout<<gTXNCount<<endl;
+		history=new Record[gTXNCount];
+		char inputChar;
+		for(int i=0;i<gTXNCount;++i)
+		{
+			i_f>>inputChar;
+			history[i].typeOfTrans=inputChar;
 
-		getline(i_f,inputToBeConverted,',');
-		cout<<inputToBeConverted<<endl;
-		//i_f.ignore();
+			i_f.ignore(',');
+
+			getline(i_f, inputToBeConverted , ',');
+			history[i].ammountChanged=std::stod(inputToBeConverted);
+
+			getline(i_f, inputToBeConverted);
+			history[i].comments=inputToBeConverted;
+		}
 		
-
-		//history=new Record[gTXNCount];
 
 		
 		historyLoaded=true;

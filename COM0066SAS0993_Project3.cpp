@@ -82,7 +82,6 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 	}
 	else
 	{
-		delete [] history;
 		getline(i_f,acc.accountHolder, ',');
 		//cout<<"Read: "<<acc.accountHolder<<endl;
 
@@ -602,8 +601,6 @@ int main()
 	cout.setf(ios::showpoint);
 	cout.precision(2);
 	
-	history=new Record[gTXNCount]; //initialize
-
 	UserInfoStorage acc;
 	acc.pinStatus=false; //initialize variable for no pin set yet  
 	
@@ -633,10 +630,11 @@ int main()
 	acc.fileName=makeFileName(acc);
 	if(loadFromFile(acc,history)==false)
 	{
-	cout<<"Enter initial balance:";
-	cin>>acc.accountBalance; 
-	cout<<endl;
-	acc.typeCheckSaveStud=chooseAccountType(); //store account type into user storage
+		cout<<"Enter initial balance:";
+		cin>>acc.accountBalance; 
+		cout<<endl;
+		acc.typeCheckSaveStud=chooseAccountType(); //store account type into user storage
+		history=new Record[gTXNCount]; //initialize
 	}
 
 	string AccountChosen; //string for the eventual display of account type

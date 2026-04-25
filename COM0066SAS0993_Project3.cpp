@@ -119,7 +119,7 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 		acc.hashedPIN = std::stoul(inputToBeConverted);
 		//cout<<"Read: "<<acc.hashedPIN<<endl;
 
-		
+		/*
 		i_f>>gTXNCount;
 		inArray=new Record[gTXNCount];
 		char inputChar;
@@ -127,22 +127,23 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 		{
 			i_f>>inputChar;
 			inArray[i].typeOfTrans=inputChar;
-			cout<<inputChar<<endl;
+			//cout<<inputChar<<endl;
 			
 			getline(i_f,inputToBeConverted,',');
 
 			getline(i_f, inputToBeConverted , ',');
 			inArray[i].ammountChanged=std::stod(inputToBeConverted);
-			cout<<inArray[i].ammountChanged<<endl;
+			//cout<<inArray[i].ammountChanged<<endl;
 
 
 			getline(i_f, inputToBeConverted);
 			inArray[i].comments=inputToBeConverted;
-			cout<<inArray[i].comments<<endl;
+			//cout<<inArray[i].comments<<endl;
 		}
+		*/
 
-		history=inArray;
-	
+		//history=inArray;
+		delete []inArray;
 		historyLoaded=true;
 		cout<<"Found and loaded account."<<endl;
 	}

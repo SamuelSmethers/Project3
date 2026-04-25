@@ -88,13 +88,35 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 		getline(i_f, inputToBeConverted , ',');
 		acc.accountBalance = std::stod(inputToBeConverted);
 		cout<<"Read: "<<acc.accountBalance<<endl;
+		
+		getline(i_f,inputToBeConverted, ',');
+		int typecheck = std::stoi(inputToBeConverted);
 
-		/*
-		getline(i_f,acc.accountBalance, ',');
-		getline(i_f,acc.typeCheckSaveStud, ',');
-		getline(i_f,acc.pinStatus, ',');
-		getline(i_f,acc.hashedPIN);
-		*/
+		switch(typecheck)
+		{
+			case 1:
+				acc.typeCheckSaveStud = Checking;
+				break;
+			case 2:
+				acc.typeCheckSaveStud = Savings;
+				break;
+			case 3:
+				acc.typeCheckSaveStud = Student;
+				break;
+			default:
+				break;
+		}
+		cout<<"Read: "<<accountTypeToString(acc)<<endl;
+
+		getline(i_f, inputToBeConverted , ',');
+		acc.pinStatus =std::stoi(inputToBeConverted);
+		cout<<"Read: "<<acc.pinStatus<<endl;
+
+		getline(i_f, inputToBeConverted , ',');
+		acc.hashedPIN = std::stoul(inputToBeConverted);
+		cout<<"Read: "<<acc.hashedPIN<<endl;
+
+		
 		historyLoaded=true;
 	}
 

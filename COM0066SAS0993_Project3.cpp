@@ -70,7 +70,7 @@ void saveToFile(const UserInfoStorage& acc,const Record *history)
 
 bool loadFromFile(UserInfoStorage& acc, Record history[])
 {
-	Record* inArray;
+	//Record* inArray;
 
 	bool historyLoaded=false;
 	ifstream i_f;
@@ -119,7 +119,7 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 		acc.hashedPIN = std::stoul(inputToBeConverted);
 		//cout<<"Read: "<<acc.hashedPIN<<endl;
 
-		
+		/*
 		i_f>>gTXNCount;
 		inArray=new Record[gTXNCount];
 		char inputChar;
@@ -151,6 +151,7 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 		}
 		
 		delete [] inArray;
+		*/
 		
 		historyLoaded=true;
 		cout<<"Found and loaded account."<<endl;

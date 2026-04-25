@@ -9,7 +9,6 @@ using namespace std;
 
 int gTXNCount=0;
 enum AccountType{Checking=1,Savings=2,Student=3};
-string accountTypeToString(UserInfoStorage& acc);
 
 
 struct Record{
@@ -107,7 +106,8 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 			default:
 				break;
 		}
-		cout<<"Read: "<<accountTypeToString(acc)<<endl;
+		//cout<<"Read: "<<accountTypeToString(acc)<<endl;
+		cout<<"read: "<<acc.typeCheckSaveStud<<endl;
 
 		getline(i_f, inputToBeConverted , ',');
 		acc.pinStatus =std::stoi(inputToBeConverted);

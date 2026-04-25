@@ -70,7 +70,7 @@ void saveToFile(const UserInfoStorage& acc,const Record *history)
 
 bool loadFromFile(UserInfoStorage& acc, Record history[])
 {
-	Record* inArray;
+	//Record* inArray;
 
 	bool historyLoaded=false;
 	ifstream i_f;
@@ -143,7 +143,7 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 		*/
 
 		//history=inArray;
-		delete []inArray;
+		//delete []inArray;
 		historyLoaded=true;
 		cout<<"Found and loaded account."<<endl;
 	}

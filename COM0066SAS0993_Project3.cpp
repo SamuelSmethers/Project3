@@ -625,7 +625,7 @@ int main()
 	cout<< "ammount: "<< history[1].ammountChanged<< endl;
 	cout<< "memo: "<< history[1].comments << endl;
 	*/
-
+	history=new Record[gTXNCount]; //initialize
 	printHeader();
 
 	bool exit=false;
@@ -638,7 +638,7 @@ int main()
 		cin>>acc.accountBalance; 
 		cout<<endl;
 		acc.typeCheckSaveStud=chooseAccountType(); //store account type into user storage
-		history=new Record[gTXNCount]; //initialize
+		
 	}
 
 	string AccountChosen; //string for the eventual display of account type

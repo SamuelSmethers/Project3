@@ -125,14 +125,18 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 		{
 			i_f>>inputChar;
 			history[i].typeOfTrans=inputChar;
-
-			i_f.ignore(',');
+			cout<<inputChar<<endl;
+			
+			getline(i_f,inputToBeConverted,',');
 
 			getline(i_f, inputToBeConverted , ',');
 			history[i].ammountChanged=std::stod(inputToBeConverted);
+			cout<<history[i].ammountChanged<<endl;
+
 
 			getline(i_f, inputToBeConverted);
 			history[i].comments=inputToBeConverted;
+			cout<<history[i].comments<<endl;
 		}
 		
 

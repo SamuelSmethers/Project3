@@ -148,7 +148,7 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 	}
 
 
-	delete inArray;
+	//delete inArray;
 	i_f.close(); //close file stream	
 	return historyLoaded;
 }

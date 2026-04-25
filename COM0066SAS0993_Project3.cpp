@@ -140,26 +140,15 @@ bool loadFromFile(UserInfoStorage& acc, Record history[])
 			inArray[i].comments=inputToBeConverted;
 			cout<<inArray[i].comments<<endl;
 		}
-		
-		/*
-		history=new Record[gTXNCount];
-		for(int i =0; i<gTXNCount;++i) //add new transactions to new array in same locations
-		{
-			history[i].typeOfTrans=inArray[i].typeOfTrans;
-			history[i].ammountChanged=inArray[i].ammountChanged;
-			history[i].comments=inArray[i].comments;
 
-		}
-		
-		delete [] inArray;
-		*/
-		
+		history=inArray;
+	
 		historyLoaded=true;
 		cout<<"Found and loaded account."<<endl;
 	}
 
 
-
+	delete inArray;
 	i_f.close(); //close file stream	
 	return historyLoaded;
 }
@@ -715,5 +704,6 @@ int main()
 	}while(exit==false);
 
 	delete[] history;
+	
 	return 0;
 }

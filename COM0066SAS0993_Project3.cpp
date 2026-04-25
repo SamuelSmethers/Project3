@@ -9,6 +9,7 @@ using namespace std;
 
 int gTXNCount=0;
 enum AccountType{Checking=1,Savings=2,Student=3};
+string accountTypeToString(UserInfoStorage& acc);
 
 
 struct Record{
